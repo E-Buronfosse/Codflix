@@ -12,6 +12,7 @@ import spark.Session;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 public class AuthController {
 
@@ -50,8 +51,22 @@ public class AuthController {
     }
 
     public String signUp(Request request, Response response) {
-        Map<String, Object> model = new HashMap<>();
-        return Template.render("auth_signup.html", model);
+        if (request.requestMethod().equals("GET")) {
+            Map<String, Object> model = new HashMap<>();
+            return Template.render("auth_signup.html", model);
+        }
+        else {
+            Map<String, String> infos = URLUtils.decodeQuery(request.body());
+            System.out.println(infos);
+            System.out.println(infos.get("email"));
+            if (!infos.get("email").equals(infos.get("email_confirm"))){
+                return "mails différents";
+            }
+            else {
+                return "tout va bien";
+            }
+            //return request.body();
+        }
     }
 
     public String logout(Request request, Response response) {
